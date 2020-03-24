@@ -16,7 +16,7 @@ def request(target, product_id, endpoint, params):
     if target != "currencies" and target != "products":
         return None
     if target == "currencies":
-      return requests.get(url)
+      return requests.get("{}{}".format(url, target))
     
     url = "{}/{}/{}/{}?".format(url, target, product_id, endpoint)
     if params != None:
@@ -80,20 +80,34 @@ def get_candles(product_id, start, end, granularity, raw):
     if raw:
         return response
     else:
-        return pd.DataFrame(json.loads(response.text))
-
+        return pd.DataFrame(json.loads(response.text), columns=['time', 'low', 'high', 'open', 'close', 'volume'])
+'''
+Get the 24h stats snapshot for a given product from the coinbase api
+product_id: the product you want
+raw: if True return an http response object else return a dataframe
+'''
 def get_stats(product_id, raw):
     response = request("products", product_id, "stats", None)
     if raw:
         return response
     else:
         return pd.DataFrame(json.loads(response.text))
-
+'''
+Return data from the currencies endpoint
+'''
+def get_currencies(raw):
+    response = request("currencies", None, None, None)
+    if raw:
+        return response
+    else:
+        return pd.DataFrame(json.loads(response.text))
 
 #print((request("products", "BTC-USD", "book", {'level':1})).text)
 #print(get_orderbook("BTC-USD", 1, True))
 #print(get_orderbook("BTC-USD", 1, False))
 #print(get_ticker("BTC-USD", True))
 #print(get_ticker("BTC-USD", False))
-print(get_trades("BTC-USD", 0, 100, True))
-print(get_trades("BTC-USD", 0, 100, False))
+#print(get_trades("BTC-USD", 0, 100, True))
+#print(get_trades("BTC-USD", 0, 100, False))
+#print(get_candles("BTC-USD", "2020-03-18T23:59:59Z", "2020-03-20T23:59:59Z", 900, True))
+#print(get_candles("BTC-USD", "2020-03-18T23:59:59Z", "2020-03-20T23:59:59Z", 900, False))
