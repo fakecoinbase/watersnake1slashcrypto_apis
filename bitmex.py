@@ -11,7 +11,7 @@ def request(endpoint, params):
             url = "{}?{}={}&".format(url, key, value)
     return requests.get(url[:-1])
 
-def format_output(raw, data):
+def format_response(raw, data):
     if raw:
         return data
     else:
@@ -85,4 +85,4 @@ def trade_bucketed(binSize, partial, symbol, fil, columns, count, start, reverse
     params = {'binSize':binSize, 'partial':partial, 'symbol':symbol, 'filter':fil, 'columns':columns, 'count':count, 'start':start, 'reverse':reverse, 'startTime':startTime, 'endTime':endTime}
     return format_response(raw, request("trade/bucketed", params))
 
-
+print(stats(False))

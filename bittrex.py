@@ -26,9 +26,10 @@ def get_currencies(raw):
 
 def get_ticker(market, raw):
     if raw:
-        return request("getticker", {'market':market})
+        return request("getticker", {'market':market}, None)
     else:
-        return pd.DataFrame(json.loads((request("getticker", {'market':market})).text))
+        print(request("getticker", {'market':market}, None))
+        return pd.DataFrame(json.loads((request("getticker", {'market':market}, None)).text))
 
 def get_market_summaries(raw):
     if raw:
@@ -57,4 +58,4 @@ def get_market_history(market, raw):
 
     
  
-
+print(get_ticker("BTCUSD", False))

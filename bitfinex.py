@@ -5,9 +5,9 @@ import requests
 import json
 
 def request(params, time_params):
-    url = 'https://api-pub.bitfinex.com/v2/'.format(endpoint)
+    url = 'https://api-pub.bitfinex.com/v2/'
     for p in params:
-        url = "{}/{}/".format(url, p)
+        url = "{}{}".format(url, p)
     if time_params != None:
         for key, value in time_params.items():
             url = '{}?{}={}&'.format(url, key, value)
@@ -19,7 +19,7 @@ def get_status():
     return request("platform", None)
 
 def get_ticker(symbol, raw):
-    response = request(['tickers', symbol])
+    response = request(['tickers/?symbols=', symbol], None)
     if raw:
         return response
     else:
@@ -29,10 +29,9 @@ def get_trades(symbol, start, end, lim, sort, raw):
     if sort not in [0, 1] or lim > 1e4:
         return None
     if raw:
-        return request(['trades', symbol], {'start':start. 'end':end, 'limit':lim, 'sort':sort})
-
+        return request(['trades', symbol], {'start':start, 'end':end, 'limit':lim, 'sort':sort})
     else:
-        return pd.DataFame(json.loads((request(['trades', symbol], {'start':start. 'end':end, 'limit':lim, 'sort':sort})).text))
+        return pd.DataFame(json.loads((request(['trades', symbol], {'start':start, 'end':end, 'limit':lim, 'sort':sort})).text))
 
 def get_book(symbol, precision, raw):
     if precision not in ['P0', 'P1', 'P2', 'P3', 'P4', 'R0']:
